@@ -10,11 +10,9 @@ const { format } = require("date-fns");
 // 1st party dependencies
 var indexRouter = require("./routes/index");
 
-const { chatCall } = require("./openai");
-
 async function getApp() {
   var app = express();
-  var port = normalizePort(process.env.PORT || '9000');
+  var port = normalizePort(process.env.PORT || '3001');
   app.set('port', port);
 
   // view engine setup
