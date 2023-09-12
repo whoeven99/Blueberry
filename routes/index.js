@@ -4,7 +4,7 @@ var path = require('path');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    console.log('Home');
+    console.log('Home111');
     res.sendFile(path.join(__dirname, "../public", "index.html"));
 });
 
