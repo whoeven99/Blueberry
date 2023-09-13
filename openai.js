@@ -1,19 +1,17 @@
-const { Configuration, OpenAIApi } = require("openai");
 require('dotenv').config();
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
 
-const openai = new OpenAIApi(configuration);
+const client = new OpenAIClient(
+  "https://stp-openai-ppe.openai.azure.com/", 
+  new AzureKeyCredential(process.env.OPENAI_API_KEY)
+);
 
-const chatCall =(content, temperature = 0, max_tokens = 3000) => {
-    return openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: 'user', content: content }],
-        temperature,
-        max_tokens,
-    });
+async function chatCall(message) {
+  console.log("chat start ", message);
+  const { choices, error } = await client.getCompletions("gpt35", [message]);
+  console.log("chat res ", choices);
+  return choices[0].text;
 }
 
 module.exports = {
