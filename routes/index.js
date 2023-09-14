@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { chatCall } = require('../openai');
+const { chatCall, generatePrompt, updateHistory } = require('../openai');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -12,8 +12,11 @@ router.post('/talk', async function(req, res, next) {
     characterName = req.body.characterName;
     message = req.body.message;
     
-    gptRes = await chatCall(message);
-    console.log(`gptReq:`, message, `\ngptRes :`,  gptRes);
+    prompt = generatePrompt(userId, characterName, message)
+
+    gptRes = (await chatCall(prompt)).message.content;
+    updateHistory(userId, characterName, message, gptRes);
+    console.log(`gptReq:`, prompt, `\ngptRes :`,  gptRes);
     res.send({"text": gptRes});
 });
 
