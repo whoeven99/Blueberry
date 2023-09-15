@@ -14,9 +14,12 @@ router.post('/talk', async function(req, res, next) {
     
     prompt = generatePrompt(userId, characterName, message)
 
-    gptRes = (await chatCall(prompt)).message.content;
-    updateHistory(userId, characterName, message, gptRes);
+    gptRes = await chatCall(prompt);
     console.log(`gptReq:`, prompt, `\ngptRes :`,  gptRes);
+    if (gptRes === undefined) {
+        res.send({"text": "对不起，你说的意思我没有理解，请你再问一遍？"});
+    }
+    updateHistory(userId, characterName, message, gptRes);
     res.send({"text": gptRes});
 });
 
